@@ -45,7 +45,7 @@ Then, apply the function to the figure/axis you want to have a legendgram:
 
 An example notebook is provided_ as well.
 
-.. _provided: https://github.com/pysal/legendgram/blob/master/examples/example.ipynb
+.. _provided: https://github.com/pysal/legendgram/blob/master/examples/examples.ipynb
 
 License
 -------
