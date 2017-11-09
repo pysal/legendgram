@@ -1,7 +1,7 @@
 Legendgrams
 ========================
 
-This is a small bit of unittested, reproducible code to provide ``legendgrams.''
+This is a small bit of unittested, reproducible code to provide legendgrams.
 Legendgrams are map legends that visualize the distribution of observations by color in a given map:
 
 .. image:: https://raw.githubusercontent.com/pysal/legendgram/master/figs/brooklyn.png
@@ -43,6 +43,9 @@ Then, apply the function to the figure/axis you want to have a legendgram:
         :width: 100%
         :alt: Example legendgram map in the US south
 
+An example notebook is provided_ as well.
+
+.. _provided: https://github.com/pysal/legendgram/blob/master/examples/examples.ipynb
 
 License
 -------
