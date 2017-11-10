@@ -30,7 +30,7 @@ Then, apply the function to the figure/axis you want to have a legendgram:
     >>> data.to_crs(epsg=5070)
     >>> f,ax = plt.subplots()
     >>> data.plot('DV80', k=10, ax=ax, scheme='Quantiles')
-    >>> bins = ps.Quantiles(data['DV80'].values).bins
+    >>> bins = ps.Quantiles(data['DV80'].values, k=10).bins
     >>> from legendgram import legendgram
     >>> import palettable.matplotlib as palmpl
     >>> legendgram(f,ax,data['DV80'],bins,pal=palmpl.Viridis_10,
