@@ -18,13 +18,14 @@ To use legendgrams, simply install the package using pip:
 
 .. code-block:: bash
 
-    $ pip install pysal
+    $ pip install legendgram
 
 Then, apply the function to the figure/axis you want to have a legendgram:
 
 .. code-block:: python
     
     >>> import pysal as ps, geopandas as gpd, matplotlib.pyplot as plt
+    >>> from legendgram import legendgram
     >>> data = gpd.read_file(ps.examples.get_path('south.shp'))
     >>> data.crs = {'init': 'epgs:4269'}
     >>> data.to_crs(epsg=5070)
