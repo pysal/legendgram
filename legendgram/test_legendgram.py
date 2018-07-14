@@ -7,11 +7,12 @@ import pysal as ps
 from palettable import matplotlib as mplpal
 from .util import inv_lut
 from .legendgram import legendgram
+import geopandas
 import numpy as np
 
 class Test_Legendgram(ut.TestCase):
     def setUp(self):
-        self.data = ps.pdio.read_files(ps.examples.get_path('south.shp'))
+        self.data = geopandas.read_file(ps.examples.get_path('south.shp'))
         self.test_attribute = 'HR70'
         self.k = 10
         self.breaks = ps.Quantiles(self.data[self.test_attribute].values, k=self.k).bins
@@ -19,8 +20,8 @@ class Test_Legendgram(ut.TestCase):
 
     def genframe(self):
         f,ax = plt.subplots()
-        geoplot(self.data, self.test_attribute, classi='Quantiles',
-                k=self.k, palette = mplpal.Inferno_10, ax=ax)
+        self.data.plot(self.test_attribute, scheme='Quantiles',
+                        k=self.k, cmap = mplpal.Inferno_10, ax=ax)
         return f,ax
 
     def test_call(self):
