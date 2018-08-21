@@ -21,7 +21,7 @@ class Test_Legendgram(ut.TestCase):
     def genframe(self):
         f,ax = plt.subplots()
         self.data.plot(self.test_attribute, scheme='Quantiles',
-                        k=self.k, cmap = mplpal.Inferno_10, ax=ax)
+                        k=self.k, cmap = 'inferno', ax=ax)
         return f,ax
 
     def test_call(self):

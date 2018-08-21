@@ -1,7 +1,9 @@
 from .util import make_location as _make_location
 import numpy as np
+from warnings import warn
+import palettable
 
-def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
+def legendgram(f, ax, y, breaks=None, pal=None, bins=50, clip=None,
                loc = 'lower left', legend_size=(.27,.2),
                frameon=False, tick_params = None):
     '''
@@ -15,9 +17,12 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
     y           : ndarray/Series
                   Values to map
     breaks      : list
+                  [Optional. Default=ten evenly-spaced percentiles from the 1st to the 99th]
                   Sequence with breaks for each class (i.e. boundary values
                   for colors)
+                  
     pal         : palettable colormap
+                  [Optional. Default=Viridis_10]
     clip        : tuple
                   [Optional. Default=None] If a tuple, clips the X
                   axis of the histogram to the bounds provided.
@@ -33,9 +38,18 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
 
     Returns
     -------
-    axis containing the legendgram. 
+    axis contining the legendgram. 
     '''
+    if pal is None and breaks is None:
+        pal = palettable.matplotlib.Viridis_10
+        k = 10
+    if breaks is None:
+        breaks = np.percentile(y, q=np.linspace(1,99,num=10))
     k = len(breaks)
+    if pal is None:
+        pal = palettable.matplotlib.get_map('Viridis_{}'.format(int(k)))
+    elif isinstance(pal, str):
+        pal = palettable.matplotlib.get_map('_'.join((pal.title(), str(int(k)))))
     assert k == pal.number, "provided number of classes does not match number of colors in palette."
     histpos = _make_location(ax, loc, legend_size=legend_size)
 
