@@ -34,6 +34,9 @@ def make_location(ax,loc, legend_size=(.27,.2)):
 
 
     """
+    if isinstance(loc, (list, tuple)):
+        assert len(loc) == 4
+        return loc
     position = ax.get_position()
     if isinstance(legend_size, float):
         legend_size = (legend_size, legend_size)
