@@ -85,6 +85,9 @@ class Test_Legendgram(ut.TestCase):
     @ut.skip('Not sure how to test this')
     def test_sizing(self):
         raise NotImplementedError('Not sure how to test this yet...')
+    
+    def test_passthrough_sizing(self):
+        raise NotImplementedError('this should test that loc=[*subax_corner, *subax_dimension] passes through make_location unphased.')
 
     def test_clip(self):
         f,ax = self.genframe()
