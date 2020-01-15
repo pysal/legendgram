@@ -7,7 +7,7 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
     '''
     Add a histogram in a choropleth with colors aligned with map
     ...
-    
+
     Arguments
     ---------
     f           : Figure
@@ -33,16 +33,19 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
 
     Returns
     -------
-    axis containing the legendgram. 
+    axis containing the legendgram.
     '''
     k = len(breaks)
-    assert k == pal.number, "provided number of classes does not match number of colors in palette."
+    # assert k == pal.number, "provided number of classes does not match number of colors in palette."
     histpos = _make_location(ax, loc, legend_size=legend_size)
 
     histax = f.add_axes(histpos)
     N, bins, patches = histax.hist(y, bins=bins, color='0.1')
     #---
-    pl = pal.get_mpl_colormap()
+    try:
+        pl = pal.get_mpl_colormap()
+    except:
+        pl = pal
     bucket_breaks = [0]+[np.searchsorted(bins, i) for i in breaks]
     for c in range(k):
         for b in range(bucket_breaks[c], bucket_breaks[c+1]):
