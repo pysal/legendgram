@@ -52,7 +52,7 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
     else:
         raise ValueError("pal needs to be either palettable colormap or matplotlib colormap, got {}".format(type(pal)))
     bucket_breaks = [0]+[np.searchsorted(bins, i) for i in breaks]
-    for c in range(k + 1):
+    for c in range(k):
         for b in range(bucket_breaks[c], bucket_breaks[c+1]):
             patches[b].set_facecolor(pl(c/k))
     #---
