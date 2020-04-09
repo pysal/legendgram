@@ -1,13 +1,17 @@
 from .util import make_location as _make_location
 import numpy as np
 
+from matplotlib.colors import Colormap
+from palettable.palette import Palette
+
+
 def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
                loc = 'lower left', legend_size=(.27,.2),
                frameon=False, tick_params = None):
     '''
     Add a histogram in a choropleth with colors aligned with map
     ...
-    
+
     Arguments
     ---------
     f           : Figure
@@ -17,7 +21,7 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
     breaks      : list
                   Sequence with breaks for each class (i.e. boundary values
                   for colors)
-    pal         : palettable colormap
+    pal         : palettable colormap or matplotlib colormap
     clip        : tuple
                   [Optional. Default=None] If a tuple, clips the X
                   axis of the histogram to the bounds provided.
@@ -33,16 +37,20 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
 
     Returns
     -------
-    axis containing the legendgram. 
+    axis containing the legendgram.
     '''
     k = len(breaks)
-    assert k == pal.number, "provided number of classes does not match number of colors in palette."
     histpos = _make_location(ax, loc, legend_size=legend_size)
-
     histax = f.add_axes(histpos)
     N, bins, patches = histax.hist(y, bins=bins, color='0.1')
     #---
-    pl = pal.get_mpl_colormap()
+    if isinstance(pal, Palette):
+        assert k == pal.number, "provided number of classes does not match number of colors in palette."
+        pl = pal.get_mpl_colormap()
+    elif isinstance(pal, Colormap):
+        pl = pal
+    else:
+        raise ValueError("pal needs to be either palettable colormap or matplotlib colormap, got {}".format(type(pal)))
     bucket_breaks = [0]+[np.searchsorted(bins, i) for i in breaks]
     for c in range(k):
         for b in range(bucket_breaks[c], bucket_breaks[c+1]):
