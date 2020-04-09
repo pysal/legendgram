@@ -22,7 +22,7 @@ class Test_Legendgram(ut.TestCase):
     def genframe(self):
         f,ax = plt.subplots()
         self.data.plot(self.test_attribute, scheme='Quantiles',
-                        k=self.k, cmap = mplpal.Inferno_10, ax=ax)
+                        k=self.k, cmap = 'inferno', ax=ax)
         return f,ax
 
     def test_call(self):
@@ -86,6 +86,9 @@ class Test_Legendgram(ut.TestCase):
     @ut.skip('Not sure how to test this')
     def test_sizing(self):
         raise NotImplementedError('Not sure how to test this yet...')
+    
+    def test_passthrough_sizing(self):
+        raise NotImplementedError('this should test that loc=[*subax_corner, *subax_dimension] passes through make_location unphased.')
 
     def test_clip(self):
         f,ax = self.genframe()
