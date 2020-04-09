@@ -2,14 +2,17 @@ from .util import make_location as _make_location
 import numpy as np
 from warnings import warn
 import palettable
+from matplotlib.colors import Colormap
+from palettable.palette import Palette
 
-def legendgram(f, ax, y, breaks=None, pal=None, bins=50, clip=None,
+
+def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
                loc = 'lower left', legend_size=(.27,.2),
                frameon=False, tick_params = None):
     '''
     Add a histogram in a choropleth with colors aligned with map
     ...
-    
+
     Arguments
     ---------
     f           : Figure
@@ -20,9 +23,7 @@ def legendgram(f, ax, y, breaks=None, pal=None, bins=50, clip=None,
                   [Optional. Default=ten evenly-spaced percentiles from the 1st to the 99th]
                   Sequence with breaks for each class (i.e. boundary values
                   for colors)
-                  
-    pal         : palettable colormap
-                  [Optional. Default=Viridis_10]
+    pal         : palettable colormap or matplotlib colormap
     clip        : tuple
                   [Optional. Default=None] If a tuple, clips the X
                   axis of the histogram to the bounds provided.
@@ -38,7 +39,7 @@ def legendgram(f, ax, y, breaks=None, pal=None, bins=50, clip=None,
 
     Returns
     -------
-    axis contining the legendgram. 
+    axis containing the legendgram.
     '''
     if pal is None and breaks is None:
         pal = palettable.matplotlib.Viridis_10
@@ -46,17 +47,17 @@ def legendgram(f, ax, y, breaks=None, pal=None, bins=50, clip=None,
     if breaks is None:
         breaks = np.percentile(y, q=np.linspace(1,99,num=10))
     k = len(breaks)
-    if pal is None:
-        pal = palettable.matplotlib.get_map('Viridis_{}'.format(int(k)))
-    elif isinstance(pal, str):
-        pal = palettable.matplotlib.get_map('_'.join((pal.title(), str(int(k)))))
-    assert k == pal.number, "provided number of classes does not match number of colors in palette."
     histpos = _make_location(ax, loc, legend_size=legend_size)
-
     histax = f.add_axes(histpos)
     N, bins, patches = histax.hist(y, bins=bins, color='0.1')
     #---
-    pl = pal.get_mpl_colormap()
+    if isinstance(pal, Palette):
+        assert k == pal.number, "provided number of classes does not match number of colors in palette."
+        pl = pal.get_mpl_colormap()
+    elif isinstance(pal, Colormap):
+        pl = pal
+    else:
+        raise ValueError("pal needs to be either palettable colormap or matplotlib colormap, got {}".format(type(pal)))
     bucket_breaks = [0]+[np.searchsorted(bins, i) for i in breaks]
     for c in range(k):
         for b in range(bucket_breaks[c], bucket_breaks[c+1]):

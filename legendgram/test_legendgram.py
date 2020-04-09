@@ -17,6 +17,7 @@ class Test_Legendgram(ut.TestCase):
         self.k = 10
         self.breaks = ps.Quantiles(self.data[self.test_attribute].values, k=self.k).bins
         self.pal = mplpal.Inferno_10
+        self.cmap = mplpal.Inferno_10.get_mpl_colormap()
 
     def genframe(self):
         f,ax = plt.subplots()
@@ -26,23 +27,23 @@ class Test_Legendgram(ut.TestCase):
 
     def test_call(self):
         f,ax = self.genframe()
-        aout = legendgram(f,ax, self.data[self.test_attribute].values, 
+        aout = legendgram(f,ax, self.data[self.test_attribute].values,
                           self.breaks, mplpal.Inferno_10)
         plt.close(f)
 
     def test_positioning(self):
         """
-        Check that changing the locstring changes the location of the plot. 
-        Also, check that all strings & ints are able to be used. 
+        Check that changing the locstring changes the location of the plot.
+        Also, check that all strings & ints are able to be used.
         """
 
         bboxes = []
         for i in range(1,11):
             f,ax = self.genframe()
-            aout = legendgram(f,ax, self.data[self.test_attribute].values, 
+            aout = legendgram(f,ax, self.data[self.test_attribute].values,
                               self.breaks, mplpal.Inferno_10, loc=i)
             f2,ax2 = self.genframe()
-            aout2 = legendgram(f2,ax2, self.data[self.test_attribute].values, 
+            aout2 = legendgram(f2,ax2, self.data[self.test_attribute].values,
                               self.breaks, mplpal.Inferno_10, loc=inv_lut[i])
             print(i,inv_lut[i])
             bbox = aout.get_position()
@@ -55,7 +56,7 @@ class Test_Legendgram(ut.TestCase):
         for i in range(len(bboxes)-1):
             self.assertTrue(bboxes[i].bounds != bboxes[i+1].bounds)
         f,ax = self.genframe()
-        aout = legendgram(f,ax, self.data[self.test_attribute].values, 
+        aout = legendgram(f,ax, self.data[self.test_attribute].values,
                               self.breaks, mplpal.Inferno_10, loc=0)
         bestbbox = aout.get_position()
         print(bestbbox.bounds, bboxes[2].bounds)
@@ -100,3 +101,15 @@ class Test_Legendgram(ut.TestCase):
         with self.assertRaises(AssertionError):
             aout = legendgram(f,ax, self.data[self.test_attribute].values,
                               self.breaks, mplpal.Inferno_12)
+
+    def test_matplotlib_cmap(self):
+        f,ax = self.genframe()
+        aout = legendgram(f,ax, self.data[self.test_attribute].values,
+                          self.breaks, self.cmap)
+        plt.close(f)
+
+    def test_pal_typeerror(self):
+        f,ax = self.genframe()
+        with self.assertRaises(ValueError):
+            aout = legendgram(f,ax, self.data[self.test_attribute].values,
+                              self.breaks, 'pal')
