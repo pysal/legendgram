@@ -1,34 +1,33 @@
 from .util import make_location as _make_location
 import numpy as np
-from warnings import warn
-import palettable
 from matplotlib.colors import Colormap
+import matplotlib.pyplot as plt
 from palettable.palette import Palette
 
 
-def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
+def legendgram(y, breaks=None, pal=None, bins=50, clip=None,
                loc = 'lower left', legend_size=(.27,.2),
-               frameon=False, tick_params = None):
+               frameon=False, tick_params = None, f=None, ax=None):
     '''
     Add a histogram in a choropleth with colors aligned with map
     ...
 
     Arguments
     ---------
-    f           : Figure
-    ax          : AxesSubplot
     y           : ndarray/Series
                   Values to map
-    breaks      : list
+    breaks      : list or int
                   [Optional. Default=ten evenly-spaced percentiles from the 1st to the 99th]
                   Sequence with breaks for each class (i.e. boundary values
-                  for colors)
-    pal         : palettable colormap or matplotlib colormap
+                  for colors). If an integer is supplied, this is used as the number of
+                  evenly-spaced percentiles to use in the discretization 
+    pal         : palettable colormap, matplotlib colormap, or str
+                  palette to use to construct the legendgram. (default: None)
     clip        : tuple
                   [Optional. Default=None] If a tuple, clips the X
                   axis of the histogram to the bounds provided.
-    loc         :   string or int
-                    valid legend location like that used in matplotlib.pyplot.legend
+    loc         : str or int
+                  valid legend location like that used in matplotlib.pyplot.legend
     legend_size : tuple
                   tuple of floats between 0 and 1 describing the (width,height)
                   of the legend relative to the original frame.
@@ -36,21 +35,30 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
                   whether to add a frame to the legendgram
     tick_params : keyword dictionary
                   options to control how the histogram axis gets ticked/labelled.
+    f           : Figuyre
+    ax          : AxesSubplot
 
     Returns
     -------
     axis containing the legendgram.
     '''
-    if pal is None and breaks is None:
-        pal = palettable.matplotlib.Viridis_10
-        k = 10
+    if f is None:
+        f = plt.gcf()
+    if ax is None:
+        ax = plt.gca()
+    if pal is None:
+        pal = 'viridis'
     if breaks is None:
-        breaks = np.percentile(y, q=np.linspace(1,99,num=10))
+        breaks = 10
+    if isinstance(breaks, int):
+        breaks = np.percentile(y, q=np.linspace(1,99,num=breaks))
     k = len(breaks)
     histpos = _make_location(ax, loc, legend_size=legend_size)
     histax = f.add_axes(histpos)
     N, bins, patches = histax.hist(y, bins=bins, color='0.1')
     #---
+    if isinstance(pal, str):
+        pl = plt.get_cmap(pal)
     if isinstance(pal, Palette):
         assert k == pal.number, "provided number of classes does not match number of colors in palette."
         pl = pal.get_mpl_colormap()
