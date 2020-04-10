@@ -5,15 +5,25 @@ from matplotlib.colors import Colormap
 from palettable.palette import Palette
 
 
-def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
-               loc = 'lower left', legend_size=(.27,.2),
-               frameon=False, tick_params = None):
-    '''
+def legendgram(
+    f,
+    ax,
+    y,
+    breaks,
+    pal,
+    bins=50,
+    clip=None,
+    loc="lower left",
+    legend_size=(0.27, 0.2),
+    frameon=False,
+    tick_params=None,
+):
+    """
     Add a histogram in a choropleth with colors aligned with map
     ...
 
-    Arguments
-    ---------
+    Parameters
+    ----------
     f           : Figure
     ax          : AxesSubplot
     y           : ndarray/Series
@@ -38,30 +48,38 @@ def legendgram(f, ax, y, breaks, pal, bins=50, clip=None,
     Returns
     -------
     axis containing the legendgram.
-    '''
+    
+    """
+    
     k = len(breaks)
     histpos = _make_location(ax, loc, legend_size=legend_size)
     histax = f.add_axes(histpos)
-    N, bins, patches = histax.hist(y, bins=bins, color='0.1')
-    #---
+    N, bins, patches = histax.hist(y, bins=bins, color="0.1")
+    # ---
     if isinstance(pal, Palette):
-        assert k == pal.number, "provided number of classes does not match number of colors in palette."
+        assert (
+            k == pal.number
+        ), "provided number of classes does not match number of colors in palette."
         pl = pal.get_mpl_colormap()
     elif isinstance(pal, Colormap):
         pl = pal
     else:
-        raise ValueError("pal needs to be either palettable colormap or matplotlib colormap, got {}".format(type(pal)))
-    bucket_breaks = [0]+[np.searchsorted(bins, i) for i in breaks]
+        raise ValueError(
+            "pal needs to be either palettable colormap or matplotlib colormap, got {}".format(
+                type(pal)
+            )
+        )
+    bucket_breaks = [0] + [np.searchsorted(bins, i) for i in breaks]
     for c in range(k):
-        for b in range(bucket_breaks[c], bucket_breaks[c+1]):
-            patches[b].set_facecolor(pl(c/k))
-    #---
+        for b in range(bucket_breaks[c], bucket_breaks[c + 1]):
+            patches[b].set_facecolor(pl(c / k))
+    # ---
     if clip is not None:
         histax.set_xlim(*clip)
     histax.set_frame_on(frameon)
     histax.get_yaxis().set_visible(False)
     if tick_params is None:
         tick_params = dict()
-    tick_params['labelsize'] = tick_params.get('labelsize', 12)
+    tick_params["labelsize"] = tick_params.get("labelsize", 12)
     histax.tick_params(**tick_params)
     return histax
