@@ -1,4 +1,5 @@
 from .util import make_location as _make_location
+from .util import _get_cmap
 import numpy as np
 from matplotlib.colors import Colormap
 import matplotlib.pyplot as plt
@@ -47,7 +48,7 @@ def legendgram(y, breaks=None, pal=None, bins=50, clip=None,
     if ax is None:
         ax = plt.gca()
     if pal is None:
-        pal = 'viridis'
+        pal = _get_cmap(ax)
     if breaks is None:
         breaks = 10
     if isinstance(breaks, int):

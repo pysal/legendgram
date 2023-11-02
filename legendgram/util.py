@@ -1,3 +1,8 @@
+import warnings
+
+from matplotlib import colormaps as cm
+from matplotlib.axes._axes import Axes
+from matplotlib.colors import ListedColormap
 
 loc_lut = {'best'         : 0,
             'upper right'  : 1,
@@ -71,3 +76,23 @@ def make_location(ax,loc, legend_size=(.27,.2)):
     elif loc.lower() == 'upper right':
         anchor_x, anchor_y = position.x0 + right_offset, position.y0 + top_offset
     return [anchor_x, anchor_y, legend_width, legend_height]
+
+
+def _get_cmap(_ax: Axes) -> ListedColormap:
+    """Detect the most recent matplotlib colormap used, if previously rendered."""
+    _images = _ax.images
+    has_images = len(_images)
+    if has_images:
+        cmap = _images[-1].cmap
+        if has_images > 1:
+            warnings.warn(
+                (
+                    "More than one image associated with the axes. "
+                    f"Defaulting to last colormap: '{cmap.name}'"
+                ),
+                UserWarning,
+                stacklevel=2
+            )
+    else:
+        cmap = cm.get_cmap("viridis")
+    return cmap
