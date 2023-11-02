@@ -35,7 +35,7 @@ def legendgram(y, breaks=None, pal=None, bins=50, clip=None,
                   whether to add a frame to the legendgram
     tick_params : keyword dictionary
                   options to control how the histogram axis gets ticked/labelled.
-    f           : Figuyre
+    f           : Figure
     ax          : AxesSubplot
 
     Returns
