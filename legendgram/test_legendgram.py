@@ -2,7 +2,6 @@ import unittest as ut
 import matplotlib as mpl
 mpl.use("pdf")
 import matplotlib.pyplot as plt
-from pysal.contrib.viz.mapping import geoplot
 import pysal as ps
 from palettable import matplotlib as mplpal
 from .util import inv_lut
