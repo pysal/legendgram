@@ -2,6 +2,7 @@ import warnings
 
 from matplotlib import colormaps as cm
 from matplotlib.axes._axes import Axes
+from matplotlib.collections import Collection
 from matplotlib.colors import ListedColormap
 
 loc_lut = {'best'         : 0,
@@ -80,19 +81,29 @@ def make_location(ax,loc, legend_size=(.27,.2)):
 
 def _get_cmap(_ax: Axes) -> ListedColormap:
     """Detect the most recent matplotlib colormap used, if previously rendered."""
-    _images = _ax.images
-    has_images = len(_images)
-    if has_images:
-        cmap = _images[-1].cmap
-        if has_images > 1:
+    _child_cmaps = [
+        (cc.cmap, cc.cmap.name) for cc
+        in _ax.properties()["children"]
+        if isinstance(cc, Collection)
+    ]
+    has_child_cmaps = len(_child_cmaps)
+    n_unique_cmaps = len(set(cc[1] for cc in _child_cmaps))
+    if has_child_cmaps:
+        cmap, cmap_name = _child_cmaps[-1]
+        if n_unique_cmaps > 1:
             warnings.warn(
                 (
-                    "More than one image associated with the axes. "
-                    f"Defaulting to last colormap: '{cmap.name}'"
+                    f"There are {n_unique_cmaps} unique colormaps associated with"
+                    f"the axes. Defaulting to last colormap: '{cmap_name}'"
                 ),
                 UserWarning,
                 stacklevel=2
             )
     else:
+        warnings.warn(
+            "There is no data associated with the `ax`.",
+            UserWarning,
+            stacklevel=2
+        )
         cmap = cm.get_cmap("viridis")
     return cmap
