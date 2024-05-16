@@ -24,14 +24,14 @@ Then, apply the function to the figure/axis you want to have a legendgram:
 
 .. code-block:: python
     
-    >>> import pysal as ps, geopandas as gpd, matplotlib.pyplot as plt
+    >>> import mapclassify as mpc, geopandas as gpd, matplotlib.pyplot as plt
     >>> from legendgram import legendgram
     >>> data = gpd.read_file(ps.examples.get_path('south.shp'))
     >>> data.crs = {'init': 'epgs:4269'}
     >>> data.to_crs(epsg=5070)
     >>> f,ax = plt.subplots()
     >>> data.plot('DV80', k=10, ax=ax, scheme='Quantiles')
-    >>> bins = ps.Quantiles(data['DV80'].values, k=10).bins
+    >>> bins = mpc.Quantiles(data['DV80'].values, k=10).bins
     >>> from legendgram import legendgram
     >>> import palettable.matplotlib as palmpl
     >>> legendgram(f,ax,data['DV80'],bins,pal=palmpl.Viridis_10,
