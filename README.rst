@@ -1,3 +1,6 @@
+**`legendgram` is in the process of being archived. It's functionality is being integrated into `mapclassify`.**
+
+
 Legendgrams
 ========================
 
