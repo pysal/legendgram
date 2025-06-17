@@ -1,6 +1,6 @@
 **legendgram is in the process of being archived.**
 
-It's functionality is being integrated into mapclassify_ as method of a classifier class.
+It's functionality is being integrated into mapclassify_ as a classifier instance method.
 For example:
 
 .. _mapclassify: https://github.com/pysal/mapclassify
