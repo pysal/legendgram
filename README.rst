@@ -1,5 +1,18 @@
-**`legendgram` is in the process of being archived. It's functionality is being integrated into `mapclassify`.**
+**legendgram is in the process of being archived.**
 
+It's functionality is being integrated into mapclassify_ as method of a classifier class.
+For example:
+
+.. _mapclassify: https://github.com/pysal/mapclassify
+
+.. code-block:: python
+    
+    >>> import geopandas, libpysal, mapclassify
+    >>> gdf = geopandas.read_file(libpysal.examples.get_path("NAT.shp")).to_crs(epsg=5070)
+    >>> ax = gdf.plot("GI89")
+    >>> ax.axis("off")
+    >>> classifier = mapclassify.EqualInterval(gdf["GI89"], k=100)
+    >>> classifier.plot_legendgram(ax=ax)
 
 Legendgrams
 ========================
