@@ -8,10 +8,9 @@ For example:
 .. code-block:: python
     
     >>> import geopandas, libpysal, mapclassify
-    >>> gdf = geopandas.read_file(libpysal.examples.get_path("NAT.shp")).to_crs(epsg=5070)
+    >>> gdf = geopandas.read_file(libpysal.examples.get_path("NAT.shp"))
     >>> ax = gdf.plot("GI89")
-    >>> ax.axis("off")
-    >>> classifier = mapclassify.EqualInterval(gdf["GI89"], k=100)
+    >>> classifier = mapclassify.EqualInterval(gdf["GI89"])
     >>> classifier.plot_legendgram(ax=ax)
 
 Legendgrams
