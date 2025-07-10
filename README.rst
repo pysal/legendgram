@@ -1,6 +1,6 @@
-**legendgram is in the process of being archived.**
+**legendgram is archived.**
 
-It's functionality is being integrated into mapclassify_ as a classifier instance method.
+Its functionality is integrated into mapclassify_ as a classifier instance method.
 For example:
 
 .. _mapclassify: https://github.com/pysal/mapclassify
